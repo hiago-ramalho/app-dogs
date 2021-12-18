@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import ForgetPassword from "../ForgetPassword";
 import LoginForm from "../LoginForm";
-import ResetPassword from "../ResetPassword";
 import UserCreate from "../UserCreate";
+import ForgetPassword from "../ForgetPassword";
+import ResetPassword from "../ResetPassword";
 
 export default function Login() {
   return (

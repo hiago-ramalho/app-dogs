@@ -1,37 +1,45 @@
+import useForm from "../../hooks/useForm";
 import { Link } from "react-router-dom";
+import { TOKEN_POST, GET_USER } from "../../services/api";
 
 import Input from '../Input';
 import Button from '../Button';
-import useForm from "../../hooks/useForm";
 
 export default function LoginForm() {
 
   const username = useForm();
   const password = useForm();
 
-  console.log(username)
+  async function getUser(token) {
+    const { url, options } = GET_USER(token);
+    const response = await fetch( url, options );
+    const json = await response.json();
 
-  function handleSubmit(event) {
+    console.log(json);
+  }
+
+  async function handleSubmit(event) {
     event.preventDefault();
 
+    console.log("Aqui")
+    
     if (username.validate() && password.validate()) {
-      fetch('https://dogsapi.origamid.dev/json/jwt-auth/v1/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify()
-      }).then(response => {
-        console.log(response);
-        return response.json();
-      }).then(json => {
-        console.log(json);
-      })
+      const { url, options } = TOKEN_POST({
+        username: username.value,
+        password: password.value,
+      });
+      
+      const response = await fetch(url, options);
+      const json = await response.json();
+      window.localStorage.setItem('token', json.token);
+      getUser(json.token);
+      console.log("dentro do fetch")
     }
+    console.log("passou do fetch")
   }
 
   return (
-    <div>
+    <section>
       <h1>Login</h1>
 
       <form action="" onSubmit={handleSubmit}>
@@ -55,6 +63,6 @@ export default function LoginForm() {
       <Link to="/login/create">
         Cadastro
       </Link>
-    </div>
-  )
+    </section>
+  );
 }
