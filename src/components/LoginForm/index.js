@@ -1,25 +1,33 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import Input from '../Input';
+import Button from '../Button';
+import useForm from "../../hooks/useForm";
+
 export default function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
+  const username = useForm();
+  const password = useForm();
+
+  console.log(username)
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    fetch('https://dogsapi.origamid.dev/json/jwt-auth/v1/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    }).then(response => {
-      console.log(response);
-      return response.json();
-    }).then(json => {
-      console.log(json);
-    })
+    if (username.validate() && password.validate()) {
+      fetch('https://dogsapi.origamid.dev/json/jwt-auth/v1/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify()
+      }).then(response => {
+        console.log(response);
+        return response.json();
+      }).then(json => {
+        console.log(json);
+      })
+    }
   }
 
   return (
@@ -27,17 +35,20 @@ export default function LoginForm() {
       <h1>Login</h1>
 
       <form action="" onSubmit={handleSubmit}>
-        <input
+        <Input
+          label="Usuário"
           type="text"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          name="username"
+          {...username}
         />
-        <input
-          type="text"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+        <Input
+          label="Senha"
+          type="password"
+          name="password"
+          {...password}
         />
-        <button>Entrar</button>
+
+        <Button>Entrar</Button>
       </form>
 
 
