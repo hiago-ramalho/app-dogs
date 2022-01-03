@@ -1,4 +1,4 @@
-export const BASE_URL_API = 'https://dogsapi.origamid.dev/json'; 
+export const BASE_URL_API = 'https://dogsapi.origamid.dev/json';
 
 export function TOKEN_POST(body) {
   return {
@@ -33,6 +33,19 @@ export function GET_USER(token) {
       headers: {
         Authorization: 'Bearer ' + token,
       },
+    },
+  };
+}
+
+export function USER_POST(body) {
+  return {
+    url: `${BASE_URL_API}/api/user`,
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
     },
   };
 }
