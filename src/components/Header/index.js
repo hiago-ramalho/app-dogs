@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
-// import { ContainerHeader, ContainerNav } from "./styles";
-import styles from './Header.module.css';
+import { UserContext } from "../../context/UserContext";
 
+import styles from './Header.module.css';
 import { ReactComponent as ImgDog } from '../../assets/dogs.svg';
+import { useContext } from "react";
 
 
 export default function Header() {
+  const { data, userLogout } = useContext(UserContext);
+
   return (
     <header className={styles.header} >
       <nav className={`${styles.nav} container`}>
@@ -13,9 +16,17 @@ export default function Header() {
           <ImgDog />
         </Link>
 
-        <Link className={styles.login} to="/login">
-          Login / Criar
-        </Link>
+        {data ? (
+          <Link className={styles.login} to="/account">
+            {data.username}
+            <button onClick={userLogout}>sair</button>
+          </Link>
+        ) : (
+          <Link className={styles.login} to="/login">
+            Login / Criar
+          </Link>
+        )}
+
       </nav>
     </header>
   );

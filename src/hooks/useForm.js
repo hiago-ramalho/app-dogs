@@ -12,7 +12,7 @@ export default function useForm(type) {
   const [error, setError] = useState(null);
 
   function validate(value) {
-    if (type === false) return;
+    if (type === false) return true;
 
     if (value.length === 0) {
       setError('Campo obrigatório.');
@@ -22,7 +22,7 @@ export default function useForm(type) {
       return false;
     } else {
       setError(null);
-      return;
+      return true;
     }
   }
 

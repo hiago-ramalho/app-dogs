@@ -1,6 +1,7 @@
-import useForm from "../../hooks/useForm";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { TOKEN_POST, GET_USER } from "../../services/api";
+import useForm from "../../hooks/useForm";
+import { UserContext } from "../../context/UserContext";
 
 import Input from '../Input';
 import Button from '../Button';
@@ -10,32 +11,14 @@ export default function LoginForm() {
   const username = useForm();
   const password = useForm();
 
-  async function getUser(token) {
-    const { url, options } = GET_USER(token);
-    const response = await fetch( url, options );
-    const json = await response.json();
-
-    console.log(json);
-  }
+  const { userLogin, error, loading } = useContext(UserContext);
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    console.log("Aqui")
     
     if (username.validate() && password.validate()) {
-      const { url, options } = TOKEN_POST({
-        username: username.value,
-        password: password.value,
-      });
-      
-      const response = await fetch(url, options);
-      const json = await response.json();
-      window.localStorage.setItem('token', json.token);
-      getUser(json.token);
-      console.log("dentro do fetch")
+      userLogin(username.value, password.value);
     }
-    console.log("passou do fetch")
   }
 
   return (
@@ -56,7 +39,9 @@ export default function LoginForm() {
           {...password}
         />
 
-        <Button>Entrar</Button>
+        {loading ? <Button disabled>Carregando...</Button> : <Button>Entrar</Button>}
+
+        {error && <p>{error}</p>}
       </form>
 
 
